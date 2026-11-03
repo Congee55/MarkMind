@@ -6,6 +6,10 @@ MarkMind 是适用于 Chrome、Edge 的浏览器扩展。它提供书签检索�
 
 **当前版本：3.7.0** · Manifest V3 · Chrome 120+ / 对应 Chromium 内核浏览器
 
+[**下载最新安装包（GitHub Releases）**](../../releases/latest) · [查看版本记录](CHANGELOG.md) · [提交问题](../../issues)
+
+> 下载 Release 附件中的 `markmind-3.7.0.zip`，解压后即可通过浏览器开发者模式安装；不需要 Node.js 或编译。
+
 ## 功能
 
 | 功能 | 说明 |
@@ -21,7 +25,7 @@ MarkMind 是适用于 Chrome、Edge 的浏览器扩展。它提供书签检索�
 
 目前提供**开发者模式安装**，无需构建或安装依赖。
 
-1. 下载此仓库的源码 ZIP 并解压，或通过 `git clone` 获取项目。
+1. 从 [Releases](../../releases/latest) 下载 `markmind-3.7.0.zip` 并解压。也可以使用源码目录安装。
 2. 打开 `chrome://extensions/`（Edge 使用 `edge://extensions/`）。
 3. 启用右上角的「开发者模式」。
 4. 点击「加载已解压的扩展程序」，选择包含 `manifest.json` 的项目根目录。
@@ -61,7 +65,7 @@ npm run package  # 生成 dist/markmind-3.7.0.zip（需要系统 zip 命令）
 
 测试包含目录规划、限定操作范围、AI 任务取消、历史备份操作、印象搜索规则、死链状态判断以及 API 接入层。单元与模拟测试不等同于真实 Chrome 扩展安装和第三方 API 的端到端验证。
 
-代码结构说明见 [开发文档](docs/DEVELOPMENT.md)，重要改动记录见 [更新记录](CHANGELOG.md)。
+代码结构说明见 [开发文档](docs/DEVELOPMENT.md)，重要改动记录见 [更新记录](CHANGELOG.md)，发布流程见 [版本发布说明](docs/RELEASING.md)。
 
 ## 安全与使用边界
 
