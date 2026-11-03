@@ -1,0 +1,14 @@
+{
+  "name": "markmind-bookmarks",
+  "private": true,
+  "version": "3.7.0",
+  "description": "Browser extension for bookmark organization, semantic search, and safe editing",
+  "scripts": {
+    "test": "node --test",
+    "check": "node scripts/check.mjs && npm test",
+    "package": "node scripts/package.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

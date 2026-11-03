@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light" />
+  <title>MarkMind · 书签工作台</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+<svg class="sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.2"/><rect x="14" y="3" width="7" height="7" rx="1.2"/><rect x="3" y="14" width="7" height="7" rx="1.2"/><rect x="14" y="14" width="7" height="7" rx="1.2"/></symbol>
+  <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M6 4.5A2.5 2.5 0 0 1 8.5 2h7A2.5 2.5 0 0 1 18 4.5V22l-6-4-6 4V4.5Z"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4H10l2.4 2.6H19A2 2 0 0 1 21 8.6V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></symbol>
+  <symbol id="i-wand" viewBox="0 0 24 24"><path d="m4 20 12-12 4 4L8 24l-4-4ZM5 2l.8 2.3L8 5l-2.2.8L5 8l-.8-2.2L2 5l2.2-.7L5 2ZM18 2l.6 1.4L20 4l-1.4.6L18 6l-.6-1.4L16 4l1.4-.6L18 2Z"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15.2 21 17l-3.9 4-1.9-1.6a8 8 0 0 1-2 .8L12.5 22h-2L10 20.2a8 8 0 0 1-2-.8L6 21l-4-4 1.6-1.8a8 8 0 0 1-.8-2L1 12.5v-2l1.8-.5a8 8 0 0 1 .8-2L2 6l4-4 2 1.6a8 8 0 0 1 2-.8L10.5 1h2l.6 1.8a8 8 0 0 1 2 .8L17 2l4 4-1.6 2a8 8 0 0 1 .8 2l1.8.5v2l-1.8.6a8 8 0 0 1-.8 2.1Z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-7-7 7 7-7 7"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="7.2"/><path d="m16.3 16.3 5 5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12 5.5 5.5L20 6"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M5 5 19 19M19 5 5 19"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 2 8 3v6.5c0 5-3 8.4-8 10.5-5-2.1-8-5.5-8-10.5V5l8-3Z"/><path d="m8 12 2.5 2.5 5-5"/></symbol>
+  <symbol id="i-external" viewBox="0 0 24 24"><path d="M12 4H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2v-7M13 3h8v8m0-8L10 14"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14 3 8l6-6M3 8h11a7 7 0 1 1-7 7"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v5m0-8v.5"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2.5"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="m15 5 4 4M4 20l4.5-.9L20 7.5 16.5 4 5 15.5 4 20Z"/><path d="M4 5h7M4 9h4"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.1 0l3-3a5 5 0 0 0-7.1-7.1l-1.6 1.6M14 11a5 5 0 0 0-7.1 0l-3 3a5 5 0 0 0 7.1 7.1l1.6-1.6"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 4h6m3 3-1 14H7L6 7m4 4v6m4-6v6"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v5l3 2"/></symbol>
+</svg>
+<div class="shell">
+  <header class="topbar">
+    <div class="brand" aria-label="MarkMind">
+      <div class="mark"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M6 7h7c2 0 3 1 3 3v16c0-3-1-4-4-4H6V7Z" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M26 7h-7c-2 0-3 1-3 3M26 7v15h-6c-3 0-4 1-4 4" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg></div>
+      <div class="brand-text"><span>markmind<span class="brand-dot">.</span></span><span class="version">3.7</span></div>
+    </div>
+    <div class="header-tools"><span id="connectionLabel" class="connection"><span class="signal"></span>未连接</span><button type="button" id="settingsBtn" class="icon-button" aria-label="打开设置" title="设置"><svg class="icon"><use href="#i-settings"/></svg></button></div>
+  </header>
+
+  <nav class="tabbar" aria-label="功能导航">
+    <button class="tab active" type="button" data-tab="home" aria-pressed="true"><svg class="icon"><use href="#i-grid"/></svg>概览</button>
+    <button class="tab" type="button" data-tab="library" aria-pressed="false"><svg class="icon"><use href="#i-bookmark"/></svg>书签库</button>
+    <button class="tab" type="button" data-tab="plan" aria-pressed="false"><svg class="icon"><use href="#i-wand"/></svg>分类<span id="planNavDot" class="nav-dot hidden"></span></button>
+    <button class="tab" type="button" data-tab="rename" aria-pressed="false"><svg class="icon"><use href="#i-edit"/></svg>AI助手<span id="renameNavDot" class="nav-dot hidden"></span></button>
+    <button class="tab" type="button" data-tab="backups" aria-pressed="false"><svg class="icon"><use href="#i-shield"/></svg>备份</button>
+  </nav>
+
+  <main id="mainScroll" class="main-scroll">
+    <section class="page home-page" data-page="home">
+      <div class="status-line">
+        <span class="status-indicator"><span id="statusDot" class="status-dot"></span><strong id="analysisStatusTitle">准备分析</strong></span>
+        <span id="homeStateBadge" class="state-badge idle">待分析</span>
+      </div>
+      <p id="analysisStatusDetail" class="status-detail">分析会生成可修改的整理方案</p>
+      <button id="homeCancelAnalysisBtn" class="cancel-inline hidden" type="button">停止分析并清除本次结果</button><div id="homeProgress" class="mini-progress hidden"><div class="mini-track"><div id="homeProgressFill" class="mini-fill"></div></div><span id="homeProgressText">正在分析…</span></div>
+      <div class="metric-row" aria-label="书签概览">
+        <button type="button" class="metric metric-small" id="metricBookmarks" title="查看书签"><div class="metric-title"><svg class="icon"><use href="#i-bookmark"/></svg>书签</div><strong id="totalBookmarks">—</strong></button>
+        <button type="button" class="metric metric-small" id="metricFolders" title="查看文件夹"><div class="metric-title"><svg class="icon"><use href="#i-folder"/></svg>文件夹</div><strong id="totalFolders">—</strong></button>
+        <button type="button" class="metric metric-small" id="metricProblems" title="检查重复文件夹"><div class="metric-title"><svg class="icon"><use href="#i-info"/></svg>重复目录</div><strong id="totalProblems">—</strong></button>
+      </div>
+      <button class="home-list-link" type="button" id="backupShortcut"><svg class="icon"><use href="#i-shield"/></svg><span>历史备份</span><strong id="homeBackupCount">—</strong><svg class="icon link-arrow"><use href="#i-arrow"/></svg></button>
+      <div class="summary-foot"><span id="issueSummary">正在检查书签…</span><button type="button" id="undoBtn" class="text-link hidden">撤销上次整理</button></div>
+    </section>
+
+    <section class="page library-page hidden" data-page="library">
+      <div class="page-heading compact-heading"><div><h1>书签库</h1></div><div class="library-top-actions"><button id="undoLastDeleteBtn" type="button" class="tiny-outline hidden">撤销删除</button><span id="libraryCount" class="counter">—</span></div></div>
+      <div class="library-tools" role="group" aria-label="查找方式">
+        <button type="button" class="library-tool active" data-library-mode="normal" aria-pressed="true"><svg class="icon"><use href="#i-search"/></svg>普通搜索</button>
+        <button type="button" class="library-tool" data-library-mode="impression" aria-pressed="false"><svg class="icon"><use href="#i-wand"/></svg>印象搜索</button>
+        <button type="button" class="library-tool" data-library-mode="deadlinks" aria-pressed="false"><svg class="icon"><use href="#i-link"/></svg>死链检测</button>
+      </div>
+      <div id="librarySearchControls" class="library-search-controls">
+        <div class="search-wrap"><svg class="icon"><use href="#i-search"/></svg><input id="librarySearch" type="search" placeholder="搜索标题、网址、所在文件夹" aria-label="搜索书签"></div>
+        <div class="filter-row" id="libraryFilters" role="group" aria-label="书签筛选"><button type="button" class="filter active" data-library-filter="all">全部</button><button type="button" class="filter" data-library-filter="root">根目录</button><button type="button" class="filter" data-library-filter="folders">文件夹</button><button type="button" class="filter" data-library-filter="issues">目录问题</button></div>
+        <div id="impressionHint" class="impression-assist hidden">
+          <span>AI 扩展会向所选模型发送书签标题与网址</span>
+          <button id="aiImpressionBtn" class="assist-button" type="button"><svg class="icon"><use href="#i-wand"/></svg>AI 扩展搜索</button>
+        </div>
+        <div id="aiSearchStatus" class="assist-status hidden" role="status" aria-live="polite"></div><button id="cancelAISearchBtn" type="button" class="cancel-inline hidden">停止 AI 搜索</button>
+      </div>
+      <div id="libraryFolderScopeBar" class="folder-scope-bar hidden"><span id="libraryFolderScopeText"></span><button id="libraryFolderScopeClear" type="button">返回文件夹</button></div><div id="libraryList" class="item-list"></div>
+      <section id="deadLinkPanel" class="dead-panel hidden" aria-label="死链检测">
+        <div class="dead-topline"><strong>死链检测</strong></div><p class="dead-explain">仅依据 HTTP 状态判断。可打开、编辑或删除结果；删除前会再次确认。</p>
+        <button id="scanDeadLinksBtn" class="dead-start" type="button"><svg class="icon"><use href="#i-link"/></svg>开始检测</button>
+        <div id="deadProgress" class="dead-progress hidden" role="status" aria-live="polite"><div class="mini-track"><div id="deadProgressFill" class="mini-fill"></div></div><span id="deadProgressText">准备检测…</span></div>
+        <div id="deadTotals" class="dead-totals hidden"><span><b id="deadCount">0</b> 疑似失效</span><span><b id="unknownCount">0</b> 无法确认</span><span><b id="aliveCount">0</b> 正常</span></div>
+        <div id="deadFilterRow" class="filter-row hidden"><button class="filter active" data-dead-filter="dead" type="button">疑似失效</button><button class="filter" data-dead-filter="unknown" type="button">无法确认</button><button class="filter" data-dead-filter="all" type="button">全部结果</button></div>
+        <div id="deadResults" class="item-list"></div>
+      </section>
+    </section>
+
+    <section class="page plan-page hidden" data-page="plan">
+      <div class="page-heading compact-heading"><div><h1>分类方案</h1></div><div class="plan-head-actions"><span id="planCount" class="counter">尚未分析</span><button id="cancelAnalysisBtn" type="button" class="cancel-inline hidden">取消分析</button></div></div>
+      <div id="planEmpty" class="plan-empty">
+        <div class="empty-illustration"><svg class="icon"><use href="#i-wand"/></svg></div>
+        <strong>还没有整理方案</strong>
+        <p>从工作台开始分析。分析只生成建议，不会直接修改书签。</p>
+        <button id="planGoAnalyze" class="quiet-button" type="button">前往工作台 <svg class="icon"><use href="#i-arrow"/></svg></button>
+      </div>
+      <div id="planContent" class="hidden">
+        <div class="plan-totals"><div><strong id="planMatched">0</strong><span>已分类</span></div><div><strong id="planPending">0</strong><span>需核实</span></div><div><strong id="planSelected">0</strong><span>参与整理</span></div></div>
+        <details id="treePreview" class="tree-preview"><summary><svg class="icon"><use href="#i-folder"/></svg>查看即将创建的目录 <span id="treeCount"></span><svg class="icon tree-chevron"><use href="#i-chevron"/></svg></summary><div id="treePreviewBody" class="tree-preview-body"></div></details>
+        <div class="plan-toolrow"><div class="search-wrap plan-search"><svg class="icon"><use href="#i-search"/></svg><input id="planSearch" type="search" placeholder="查找需修正的书签"></div><button id="selectAllBtn" type="button" class="subtle-btn">全选</button><button id="selectNoneBtn" type="button" class="subtle-btn">清空</button></div>
+        <div class="filter-row" role="group" aria-label="方案筛选"><button type="button" class="filter active" data-plan-filter="all">全部</button><button type="button" class="filter" data-plan-filter="pending">需核实</button><button type="button" class="filter" data-plan-filter="changed">需移动</button><button type="button" class="filter" data-plan-filter="unselected">未选中</button></div>
+        
+        <div id="planList" class="item-list plan-list"></div>
+      </div>
+    </section>
+    <section class="page rename-page hidden" data-page="rename">
+      <div class="page-heading compact-heading"><h1>AI 操作</h1><div class="plan-head-actions"><span class="counter" id="aiActionState">按指令处理</span><button id="cancelAssistantAI" class="cancel-inline hidden" type="button">停止 AI 分析</button></div></div>
+      <div class="ai-workflow-switch" role="group" aria-label="操作类型">
+        <button type="button" class="ai-switch active" data-ai-workflow="organize" aria-pressed="true"><svg class="icon"><use href="#i-folder"/></svg>智能整理</button>
+        <button type="button" class="ai-switch" data-ai-workflow="rename" aria-pressed="false"><svg class="icon"><use href="#i-edit"/></svg>优化命名</button>
+      </div>
+      <div id="organizeWorkflow" class="ai-flow">
+        <div id="orgEditor" class="ai-flow">
+          <div class="rename-scope-box">
+            <div class="rename-label">选择来源 <span>支持多个文件夹 + 多条书签</span></div>
+            <button type="button" class="picker-trigger" id="orgScopeBtn"><svg class="icon"><use href="#i-folder"/></svg><span id="orgScopeText">选择要处理的书签 / 文件夹</span><svg class="icon"><use href="#i-chevron"/></svg></button>
+            <div class="picker-chips" id="orgScopeChips"></div>
+          </div>
+          <div class="rename-scope-box">
+            <label class="rename-label" for="orgInstruction">告诉 AI 要做什么 <span>用自己的话描述</span></label>
+            <textarea id="orgInstruction" rows="3" maxlength="450" placeholder="例如：在学习文件夹下新建打字子文件夹，移动相关书签"></textarea>
+          </div>
+          <div class="org-target-grid">
+            <div class="rename-scope-box"><label class="rename-label" for="orgParentBtn">创建在</label><button id="orgParentBtn" class="picker-trigger" type="button"><svg class="icon"><use href="#i-folder"/></svg><span id="orgParentText">选择父文件夹</span><svg class="icon"><use href="#i-chevron"/></svg></button></div>
+            <div class="rename-scope-box"><label class="rename-label" for="orgTargetName">子文件夹名称</label><input id="orgTargetName" maxlength="24" placeholder="如：打字" autocomplete="off"></div>
+          </div>
+          <div id="orgHint" class="rename-hint" role="status">先选定来源，再输入指令。插件会预览哪些书签会移动。</div>
+        </div>
+        <div id="orgReview" class="ai-flow hidden">
+          <div class="rename-lock-summary"><svg class="icon"><use href="#i-shield"/></svg><span id="orgReviewSummary">安全范围已锁定</span><button type="button" id="orgEditScopeBtn">修改指令</button></div>
+          <div class="org-review-totals"><span id="orgMatched">0 条建议移动</span><label><input type="checkbox" id="orgShowAll">显示未匹配</label></div>
+          <div id="orgResultList" class="rename-result-list"></div>
+        </div>
+        <div class="rename-bottom-row"><button type="button" class="link-minor hidden" id="orgUndoBtn"><svg class="icon"><use href="#i-undo"/></svg>撤销上次智能整理</button></div>
+      </div>
+      <div id="renameWorkflow" class="ai-flow hidden">
+        <div class="page-heading compact-heading"><strong>优化书签标题</strong><span id="renameCount" class="counter">未选择</span></div>
+      <div id="renameLockSummary" class="rename-lock-summary hidden"><svg class="icon"><use href="#i-folder"/></svg><span id="renameLockText">仅修改选定书签</span><button type="button" id="renameEditScopeBtn">修改范围</button></div>
+      <div class="rename-modes" role="group" aria-label="命名操作范围">
+        <button type="button" class="rename-mode active" data-rename-mode="folder" aria-pressed="true"><svg class="icon"><use href="#i-folder"/></svg>按文件夹</button>
+        <button type="button" class="rename-mode" data-rename-mode="selected" aria-pressed="false"><svg class="icon"><use href="#i-bookmark"/></svg>选定书签</button>
+      </div>
+      <div id="renameFolderSection" class="rename-scope-box">
+        <label class="rename-label" for="renameFolderSelect">操作范围 <span>包含该文件夹下的子目录</span></label>
+        <button type="button" id="renameFolderPickerBtn" class="picker-trigger"><svg class="icon"><use href="#i-folder"/></svg><span id="renameFolderPickerText">选择文件夹</span><svg class="icon"><use href="#i-chevron"/></svg></button><select id="renameFolderSelect" class="hidden" aria-hidden="true"><option value="">请选择文件夹</option></select>
+      </div>
+      <div class="rename-scope-box">
+        <label class="rename-label" for="renameInstruction">告诉 AI 你希望如何命名 <span>支持自然语言</span></label>
+        <textarea id="renameInstruction" rows="2" maxlength="350" placeholder="例如：把选中书签改成简短、清晰的中文标题"></textarea>
+        <div id="renameScopeHint" class="rename-hint" role="status">请选择需要优化的文件夹或书签</div>
+      </div>
+      <div id="renameSourceBox" class="rename-source-box">
+        <div class="rename-section-title"><strong>本次处理的书签</strong><button type="button" id="renameToggleAll" class="link-minor">全选</button></div>
+        <div class="search-wrap"><svg class="icon"><use href="#i-search"/></svg><input id="renameSearch" type="search" placeholder="搜索并勾选书签" aria-label="搜索待命名书签"></div>
+        <div id="renameSourceList" class="rename-source-list"></div>
+      </div>
+      <div id="renameReviewBox" class="rename-review-box hidden">
+        <div class="rename-section-title"><strong>新旧名称对照</strong><span id="renameReviewCount" class="rename-review-count">0 条建议</span></div>
+        <p class="rename-preview-note">只修改勾选的标题，不修改网址和所在文件夹。你可以直接编辑建议名称。</p>
+        <div id="renameResultList" class="rename-result-list"></div>
+      </div>
+      <div class="rename-bottom-row"><button type="button" id="renameResetBtn" class="link-minor hidden">重新选择范围</button><button type="button" id="renameUndoBtn" class="link-minor hidden"><svg class="icon"><use href="#i-undo"/></svg>撤销上次命名</button></div>
+      </div>
+    </section>
+    <section class="page backup-page hidden" data-page="backups">
+      <div class="page-heading compact-heading"><div><h1>历史备份</h1></div><span id="backupCount" class="counter">0 份</span></div>
+      <div class="backup-tools"><button id="createBackupBtn" type="button" class="backup-create"><svg class="icon"><use href="#i-folder"/></svg>立即备份当前书签</button></div>
+      <p class="backup-hint">整理前会自动备份。恢复时先将现有书签归档，不会直接删除。</p>
+      <div id="backupList" class="backup-list"></div>
+      <div id="restoreNotice" class="restore-notice hidden"></div>
+    </section>
+  </main>
+
+  <footer class="action-bar">
+    <div id="progress" class="progress hidden" role="status" aria-live="polite"><div class="progress-track"><div id="progressFill" class="progress-fill"></div></div><span id="progressText">准备分析…</span></div>
+    <div class="actions"><button type="button" id="analyzeBtn" class="main-button"><svg class="icon"><use href="#i-wand"/></svg><span id="analyzeLabel">开始 AI 精准分类</span><svg class="icon end-arrow"><use href="#i-arrow"/></svg></button><button type="button" id="applyBtn" class="main-button hidden"><svg class="icon"><use href="#i-check"/></svg>备份并应用</button>
+      <button type="button" id="renameActionBtn" class="main-button hidden"><svg class="icon"><use href="#i-edit"/></svg><span id="renameActionLabel">生成命名建议</span><svg class="icon end-arrow"><use href="#i-arrow"/></svg></button>
+      <button type="button" id="orgActionBtn" class="main-button hidden"><svg class="icon"><use href="#i-wand"/></svg><span id="orgActionLabel">生成整理方案</span><svg class="icon end-arrow"><use href="#i-arrow"/></svg></button></div>
+    <div class="action-note hidden"><svg class="icon"><use href="#i-shield"/></svg><span id="footerHint"></span></div>
+  </footer>
+</div>
+
+<dialog id="settingsDialog" class="modal settings-modal" aria-labelledby="settingsTitle">
+  <div class="modal-head settings-head"><div><span class="settings-eyebrow">PREFERENCES</span><h2 id="settingsTitle">设置</h2></div><button type="button" class="icon-button" data-close="settingsDialog" aria-label="关闭设置"><svg class="icon"><use href="#i-x"/></svg></button></div>
+  <div class="settings-scroll">
+    <div class="settings-section-title">AI 接口</div>
+    <label class="field-label" for="apiProviderSelect">服务提供商</label>
+    <select class="full-select" id="apiProviderSelect"><option value="deepseek">DeepSeek（默认）</option><option value="openai">OpenAI</option><option value="openrouter">OpenRouter</option><option value="qwen">阿里云百炼（通义千问）</option><option value="siliconflow">硅基流动</option></select>
+    <label class="field-label" for="apiKeyInput"><span id="apiKeyLabel">DeepSeek</span> API Key</label>
+    <div class="key-wrap"><input id="apiKeyInput" type="password" placeholder="sk-..." autocomplete="off" spellcheck="false"><button id="revealKeyBtn" class="icon-button" type="button" aria-label="显示或隐藏密钥"><svg class="icon"><use href="#i-eye"/></svg></button></div>
+    <label class="field-label" for="modelSelect">模型</label>
+    <select class="full-select" id="modelSelect"><option value="deepseek-chat">DeepSeek Chat</option><option value="deepseek-reasoner">DeepSeek Reasoner</option><option value="__custom__">自定义模型</option></select>
+    <input id="customModelInput" class="full-select custom-model hidden" type="text" maxlength="120" placeholder="填写模型 ID" autocomplete="off" spellcheck="false" aria-label="自定义模型 ID">
+    <div class="settings-security"><svg class="icon"><use href="#i-shield"/></svg><span id="providerHint">每个服务独立保存密钥，仅发送到所选服务的固定 HTTPS 接口。</span></div>
+    <div class="settings-section-title settings-gap">安全与备份</div>
+    <label class="checkbox-line settings-backup"><input id="backupToggle" type="checkbox" checked><span><strong>操作前自动备份</strong><small>保存在浏览器「其他书签」</small></span></label>
+    <div id="settingsError" class="field-error hidden"></div>
+  </div>
+  <div class="settings-footer"><button id="saveSettingsBtn" class="main-button modal-action" type="button">保存设置</button></div>
+</dialog>
+<dialog id="bookmarkEditDialog" class="modal bookmark-edit-modal" aria-labelledby="bookmarkEditTitle">
+  <div class="modal-head"><div><h2 id="bookmarkEditTitle">编辑书签</h2></div><button type="button" class="icon-button" data-close="bookmarkEditDialog" aria-label="关闭编辑"><svg class="icon"><use href="#i-x"/></svg></button></div>
+  <div class="edit-form">
+    <label class="field-label" for="bookmarkEditName">书签名称</label><input id="bookmarkEditName" class="edit-input" type="text" maxlength="300" placeholder="输入名称">
+    <label class="field-label" for="bookmarkEditUrl">网址</label><input id="bookmarkEditUrl" class="edit-input" type="url" placeholder="https://example.com" spellcheck="false">
+    <div id="bookmarkEditPath" class="edit-path"></div><div id="bookmarkEditError" class="field-error hidden"></div>
+    <div class="edit-actions"><button id="bookmarkDeleteBtn" type="button" class="danger-outline">删除书签</button><button id="bookmarkSaveBtn" type="button" class="main-button">保存修改</button></div>
+  </div>
+</dialog>
+<dialog id="folderEditDialog" class="modal bookmark-edit-modal" aria-labelledby="folderEditTitle">
+  <div class="modal-head"><h2 id="folderEditTitle">编辑文件夹</h2><button type="button" class="icon-button" data-close="folderEditDialog" aria-label="关闭编辑"><svg class="icon"><use href="#i-x"/></svg></button></div>
+  <div class="edit-form"><label class="field-label" for="folderEditName">文件夹名称</label><input id="folderEditName" class="edit-input" type="text" maxlength="90" placeholder="输入简短清晰的名称" autocomplete="off">
+  <div id="folderEditPath" class="edit-path"></div><div id="folderEditError" class="field-error hidden"></div>
+  <div class="edit-actions"><button id="folderDeleteBtn" type="button" class="danger-outline">删除空文件夹</button><button id="folderSaveBtn" type="button" class="main-button">保存名称</button></div></div>
+</dialog>
+<dialog id="confirmDialog" class="modal" aria-labelledby="confirmTitle"><div class="modal-head"><div><h2 id="confirmTitle">确认整理书签？</h2></div><button class="icon-button" type="button" data-close="confirmDialog" aria-label="关闭"><svg class="icon"><use href="#i-x"/></svg></button></div><p id="confirmSummary" class="modal-description"></p><div class="warning-panel"><svg class="icon"><use href="#i-shield"/></svg><span id="backupMessage">应用前自动创建完整备份，并保留撤销入口。</span></div><label class="confirm-check"><input id="confirmCheckbox" type="checkbox">我已检查分类结果，确认执行所选的书签移动</label><div class="dialog-actions"><button class="secondary-button" type="button" data-close="confirmDialog">返回检查</button><button id="confirmApplyBtn" type="button" class="main-button" disabled>确认应用</button></div></dialog>
+<dialog id="restoreDialog" class="modal" aria-labelledby="restoreTitle"><div class="modal-head"><h2 id="restoreTitle">从备份恢复</h2><button class="icon-button" type="button" data-close="restoreDialog" aria-label="关闭"><svg class="icon"><use href="#i-x"/></svg></button></div><p id="restoreSummary" class="modal-description"></p><div class="warning-panel"><svg class="icon"><use href="#i-shield"/></svg><span>当前书签会先移动到「MarkMind Archive」归档文件夹，之后才复制选定备份。不会删除原书签或已有备份。</span></div><label class="confirm-check"><input id="restoreCheckbox" type="checkbox">我已核对备份日期和书签数量，确认恢复</label><div class="dialog-actions"><button class="secondary-button" type="button" data-close="restoreDialog">取消</button><button id="restoreApplyBtn" class="main-button" type="button" disabled>恢复此备份</button></div></dialog>
+<dialog id="renameConfirmDialog" class="modal" aria-labelledby="renameConfirmTitle">
+  <div class="modal-head"><h2 id="renameConfirmTitle">确认修改书签名称？</h2><button class="icon-button" type="button" data-close="renameConfirmDialog" aria-label="关闭"><svg class="icon"><use href="#i-x"/></svg></button></div>
+  <p id="renameConfirmSummary" class="modal-description"></p>
+  <div class="warning-panel"><svg class="icon"><use href="#i-shield"/></svg><span>仅更新所选书签标题；网址与目录保持不变。默认先创建书签备份，并记录可撤销的旧名称。</span></div>
+  <label class="confirm-check"><input id="renameConfirmCheck" type="checkbox">我已检查新旧名称及操作范围，同意修改</label>
+  <div class="dialog-actions"><button type="button" class="secondary-button" data-close="renameConfirmDialog">返回检查</button><button type="button" id="renameConfirmBtn" class="main-button" disabled>确认修改</button></div>
+</dialog>
+<dialog id="pickerDialog" class="modal picker-dialog" aria-labelledby="pickerTitle">
+  <div class="modal-head"><div><h2 id="pickerTitle">选择文件夹</h2><p id="pickerSubtitle" class="picker-subtitle">可以同时勾选多个文件夹</p></div><button type="button" id="pickerCloseBtn" class="icon-button" aria-label="关闭"><svg class="icon"><use href="#i-x"/></svg></button></div>
+  <div class="search-wrap"><svg class="icon"><use href="#i-search"/></svg><input id="pickerSearch" type="search" placeholder="搜索文件夹或书签" aria-label="搜索文件夹或书签"></div>
+  <div class="picker-tabs" id="pickerTabs"><button type="button" class="active" data-picker-type="folders">文件夹</button><button type="button" data-picker-type="bookmarks">书签</button></div>
+  <div id="pickerSelected" class="picker-selected" aria-live="polite">已选 0 项</div>
+  <div id="pickerList" class="picker-list"></div>
+  <div class="picker-footer"><button type="button" id="pickerClear" class="secondary-button">清空</button><button type="button" id="pickerDone" class="main-button">完成选择</button></div>
+</dialog>
+<dialog id="orgConfirmDialog" class="modal" aria-labelledby="orgConfirmTitle">
+  <div class="modal-head"><h2 id="orgConfirmTitle">确认移动所选书签？</h2><button type="button" class="icon-button" data-close="orgConfirmDialog" aria-label="关闭"><svg class="icon"><use href="#i-x"/></svg></button></div>
+  <p id="orgConfirmSummary" class="modal-description"></p>
+  <div class="warning-panel"><svg class="icon"><use href="#i-shield"/></svg><span>仅移动明确勾选的书签，保留原网址和标题。默认创建完整备份，并保存可撤销的原始位置。</span></div>
+  <label class="confirm-check"><input id="orgConfirmCheck" type="checkbox">我已核对来源、目标文件夹和移动清单</label>
+  <div class="dialog-actions"><button class="secondary-button" type="button" data-close="orgConfirmDialog">返回预览</button><button type="button" id="orgConfirmBtn" class="main-button" disabled>确认移动</button></div>
+</dialog>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="ai-client.js"></script><script src="engine.js"></script><script src="impression-engine.js"></script><script src="library-tools.js"></script><script src="backup.js"></script><script src="rename-engine.js"></script><script src="organize-engine.js"></script><script src="popup.js"></script><script src="rename-ui.js"></script><script src="organize-ui.js"></script>
+</body></html>

@@ -1,0 +1,21 @@
+# Local dependencies and build output
+node_modules/
+dist/
+coverage/
+*.crx
+*.zip
+
+# Editors and operating system
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.local.json
+*.key
+*.pem

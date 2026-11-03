@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "MarkMind AI · 智能书签整理",
+  "version": "3.7.0",
+  "description": "多模型 AI 分类与命名、印象搜索、死链管理、书签就地编辑、备份与撤销",
+  "permissions": [
+    "bookmarks",
+    "storage",
+    "tabs",
+    "alarms"
+  ],
+  "host_permissions": [
+    "https://api.deepseek.com/*",
+    "https://api.openai.com/*",
+    "https://openrouter.ai/*",
+    "https://dashscope.aliyuncs.com/*",
+    "https://api.siliconflow.cn/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "MarkMind AI",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "optional_host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "minimum_chrome_version": "120"
+}
